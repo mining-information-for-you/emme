@@ -1,0 +1,18 @@
+{
+  "main.css": "static/css/main.5de12f24.css",
+  "main.css.map": "static/css/main.5de12f24.css.map",
+  "main.js": "static/js/main.0151b1c2.js",
+  "main.js.map": "static/js/main.0151b1c2.js.map",
+  "static/media/bottombar.scss": "static/media/bottombar.16e4bd20.scss",
+  "static/media/contact.scss": "static/media/contact.6ae77148.scss",
+  "static/media/contactprofile.scss": "static/media/contactprofile.621210db.scss",
+  "static/media/contacts.scss": "static/media/contacts.712d8852.scss",
+  "static/media/content.scss": "static/media/content.cde59325.scss",
+  "static/media/message.scss": "static/media/message.d41d8cd9.scss",
+  "static/media/messageinput.scss": "static/media/messageinput.a579d4d8.scss",
+  "static/media/messages.scss": "static/media/messages.36062740.scss",
+  "static/media/principal.scss": "static/media/principal.674c684f.scss",
+  "static/media/profile.scss": "static/media/profile.e352d4d4.scss",
+  "static/media/search.scss": "static/media/search.cf2d6be4.scss",
+  "static/media/sidepanel.scss": "static/media/sidepanel.d9fa9e08.scss"
+}
