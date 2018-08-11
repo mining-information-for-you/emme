@@ -1,4 +1,4 @@
-import { ApiAiClient } from "api-ai-javascript";
+import { ApiAiClient } from "../api-ai-javascript/es6/ApiAiClient";
 import to from "await-to-js";
 import types from "../store/action-types";
 import { msgChatMessageSuccess, msgChatMessageError } from "../store/actions";

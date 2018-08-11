@@ -6,7 +6,7 @@ const initState = {
   messages: [
     {
       text: "Welcome! Any questions?",
-      sender: "EMME",
+      sender: "0",
       isErrorMessage: false
     }
   ],

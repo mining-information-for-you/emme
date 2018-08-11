@@ -2,7 +2,7 @@ import types from "./action-types";
 
 let isErrorMessage = false;
 let onProcess = false;
-let sender = "EMME";
+let sender = "0";
 let error = null;
 console.log("CHECK: ACTION ENTERED ONCE");
 
@@ -12,7 +12,7 @@ export const msgChatMessageRequest = text => ({
   payload: {
     message: {
       text,
-      sender: "User",
+      sender: "1",
       isErrorMessage
     },
     onProcess: true,
