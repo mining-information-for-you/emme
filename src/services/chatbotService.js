@@ -6,4 +6,4 @@ export const botClient = new ApiAiClient({
 });
 
 export const sendMessageToBot = (text) =>
-    new Promise((resolve, reject) => {} );
+    botClient.textRequest(text);

@@ -10,11 +10,9 @@ export const styles = theme => ({
         transition: '.2s cubic-bezier(.55,0,.1,1)',
         boxShadow: 'none',
         width: '100%',
+        padding: 0,
         "&:hover": {
             transform: 'scale(1.05)'
-        },
-        '@media only screen and (max-width: 768px) and (min-width: 481px)': {
-            padding: '20px 15px',
         },
         '@media only screen and (max-width: 480px)': {
             height: '42px',

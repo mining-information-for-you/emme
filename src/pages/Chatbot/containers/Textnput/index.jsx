@@ -3,20 +3,40 @@ import {withStyles} from '@material-ui/core/styles'
 import {styles} from "./styles";
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {Button} from '@material-ui/core'
+import {Button, CircularProgress} from '@material-ui/core'
 import classNames from 'classnames';
+import {sendMessageToBot} from "../../../../actions";
+import {Field, reduxForm} from 'redux-form'
 
 class TextInput extends Component {
+    constructor(props) {
+        super(props);
+        this._onSubmit = this._onSubmit.bind(this);
+    }
+
+    _onSubmit(values) {
+        return new Promise((resolve, reject) => {
+            this.props.sendMessageToBot(values.inputTextMessage)
+                .then(() => resolve())
+                .catch(() => reject())
+        });
+    }
+
     render() {
-        const {classes} = this.props;
+
+        const {handleSubmit, classes, submitting, pristine} = this.props;
+
         return (
             <div className={classNames(classes.inputBar, classes.inputBarFixed)}>
-                <form>
+                <form onSubmit={handleSubmit(this._onSubmit)}>
                     <div className={classes.inputBarInner}>
-                        <input
+                        <Field
+                            component='input'
+                            required={true}
                             placeholder="Ask something to me..."
-                            className={classes.input}
                             type="text"
+                            name="inputTextMessage"
+                            className={classes.input}
                         />
                         <div className={classes.buttonContainer}>
                             <Button
@@ -24,8 +44,9 @@ class TextInput extends Component {
                                 variant="contained"
                                 color="secondary"
                                 className={classes.button}
+                                disabled={pristine || submitting}
                             >
-                                OK
+                                {submitting ? <CircularProgress color="primary" size={30} thickness={3}/> : 'Send'}
                             </Button>
                         </div>
                     </div>
@@ -38,7 +59,10 @@ class TextInput extends Component {
 
 TextInput = compose(
     withStyles(styles, {withTheme: true}),
-    connect(null, {})
+    connect(null, {sendMessageToBot}),
+    reduxForm({
+        form: 'BotInput',
+    }),
 )(TextInput);
 
 export {TextInput}
