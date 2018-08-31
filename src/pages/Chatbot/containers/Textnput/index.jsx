@@ -37,6 +37,7 @@ class TextInput extends Component {
                             required={true}
                             placeholder="Ask something to me..."
                             type="text"
+                            autoComplete="off"
                             name="inputTextMessage"
                             className={classes.input}
                         />
