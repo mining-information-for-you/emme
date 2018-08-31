@@ -1,5 +1,5 @@
 import {sendMessageToBot as sendMessageToBotApi} from "../services";
-import {ACTION_TYPES} from "../constants";
+import {ACTION_TYPES, USER_TYPES} from "../constants";
 
 export const sendMessageToBot = (text) => (dispatch) =>
     new Promise((resolve, reject) => {
@@ -8,7 +8,8 @@ export const sendMessageToBot = (text) => (dispatch) =>
             type: ACTION_TYPES.CHATBOT.SEND_MESSAGE_TO_LIST,
             payload: {
                 id: Date.now(),
-                text
+                text,
+                messageFrom: USER_TYPES.HUMAN
             }
         });
 
@@ -22,13 +23,13 @@ export const sendMessageToBot = (text) => (dispatch) =>
                     type: ACTION_TYPES.CHATBOT.SEND_MESSAGE_TO_LIST,
                     payload: {
                         id: Date.now(),
-                        text: res.fulfilment.speech
+                        text: res.result.fulfillment.speech,
+                        messageFrom: USER_TYPES.BOT
                     }
                 });
                 resolve()
             })
             .catch(err => {
-                dispatch({type: ACTION_TYPES.CHATBOT.FETCH_BOT_ANSWER.SUCCESS});
                 console.log(err);
                 reject(err)
             })

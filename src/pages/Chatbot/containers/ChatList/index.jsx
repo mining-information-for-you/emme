@@ -9,15 +9,21 @@ import {
 } from '@material-ui/icons';
 import classNames from 'classnames';
 import Typist from 'react-typist';
+import _ from 'lodash'
+import {USER_TYPES} from "../../../../constants";
 
 class ChatList extends Component {
 
+    constructor(props) {
+        super(props);
+        this._renderMessagesList = this._renderMessagesList.bind(this)
+    }
 
-    _renderLeftRow() {
+    _renderLeftRow(item) {
         const {classes} = this.props;
 
         return (
-            <div className={classes.messageContainer}>
+            <div key={`${item.id}_leftRow`} className={classes.messageContainer}>
                 <ChatIcon
                     classes={{
                         root: classes.messageIcon
@@ -26,60 +32,75 @@ class ChatList extends Component {
                 <div className={classes.messageText}>
                     <Typist
                         avgTypingDelay={30}
+                        onCharacterTyped={() => this.scrollToBottom()}
                         stdTypingDelay={15}
                         cursor={{
                             hideWhenDone: true,
                         }}
-                    >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-
-                    </Typist>
+                    >{item.text}</Typist>
                 </div>
             </div>
         )
     }
 
-    _renderRightRow() {
+    _renderRightRow(item) {
         const {classes} = this.props;
 
         return (
-            <div className={classes.messageContainer}>
+            <div key={`${item.id}_rightRow`} className={classes.messageContainer}>
                 <FaceIcon
                     classes={{
                         root: classes.rightMessageIcon
                     }}
                 />
-                <div className={classes.rightMessageText}>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-                    culpa qui officia deserunt mollit anim id est laborum
-                </div>
+                <div className={classes.rightMessageText}>{item.text}</div>
             </div>
         )
     }
 
+    _renderMessagesList() {
+        return _.map(this.props.messagesList, message => {
+            if (message.messageFrom === USER_TYPES.BOT) {
+                return this._renderLeftRow(message)
+            }
+            return this._renderRightRow(message)
+        })
+    }
+
+    scrollToBottom() {
+        const scrollHeight = this.messageList.scrollHeight;
+        const height = this.messageList.clientHeight;
+        const maxScrollTop = scrollHeight - height;
+        this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
 
     render() {
         const {classes} = this.props;
         return (
-            <div className={classes.chatListContainer}>
+            <div
+                ref={(div) => {
+                    this.messageList = div;
+                }}
+                className={classes.chatListContainer}>
                 <div className={classes.chatListInner}>
-
-                    {this._renderLeftRow()}
-                    {this._renderRightRow()}
-
-
+                    {this._renderMessagesList()}
                 </div>
             </div>
         )
     }
 }
 
+const mapStateToProps = (state) => ({
+    messagesList: state.chatbot.messagesList
+});
+
 ChatList = compose(
     withStyles(styles, {withTheme: true}),
-    connect(null, {})
+    connect(mapStateToProps)
 )(ChatList);
 
 export {ChatList}

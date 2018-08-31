@@ -15,8 +15,10 @@ class TextInput extends Component {
     }
 
     _onSubmit(values) {
+        const inputValue = values.inputTextMessage;
+        this.props.reset();
         return new Promise((resolve, reject) => {
-            this.props.sendMessageToBot(values.inputTextMessage)
+            this.props.sendMessageToBot(inputValue)
                 .then(() => resolve())
                 .catch(() => reject())
         });
