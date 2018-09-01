@@ -1,26 +1,14 @@
+import green from '@material-ui/core/colors/green';
+
+
 export const styles = theme => ({
-    button: {
-        fontSize: '1.125rem',
-        textTransform: 'uppercase',
-        letterSpacing: '.03125rem',
-        borderRadius: '100px',
-        fontWeight: '700',
-        userSelect: 'none',
-        height: '69px',
-        transition: '.2s cubic-bezier(.55,0,.1,1)',
-        boxShadow: 'none',
-        width: '100%',
-        padding: 0,
-        "&:hover": {
-            transform: 'scale(1.05)'
-        },
-        '@media only screen and (max-width: 480px)': {
-            height: '42px',
-        }
-    },
     buttonContainer: {
         width: '16.6667%',
+        textAlign: 'right',
         maxWidth: '170px',
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignContent: 'center',
         '@media only screen and (min-width: 769px)': {
             width: '16.6667%'
         },

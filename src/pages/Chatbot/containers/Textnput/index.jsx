@@ -3,12 +3,20 @@ import {withStyles} from '@material-ui/core/styles'
 import {styles} from "./styles";
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {Button, CircularProgress} from '@material-ui/core'
 import classNames from 'classnames';
 import {sendMessageToBot} from "../../../../actions";
 import {Field, reduxForm} from 'redux-form'
+import {Dictaphone, LoadingFabButton} from "../../../../components";
+import {Send as SendIcon} from '@material-ui/icons';
 
 class TextInput extends Component {
+
+    state = {
+        listening: false,
+        typing: false,
+        resetMicFunc: null,
+    };
+
     constructor(props) {
         super(props);
         this._onSubmit = this._onSubmit.bind(this);
@@ -17,6 +25,7 @@ class TextInput extends Component {
     _onSubmit(values) {
         const inputValue = values.inputTextMessage;
         this.props.reset();
+        this.state.resetMicFunc();
         return new Promise((resolve, reject) => {
             this.props.sendMessageToBot(inputValue)
                 .then(() => resolve())
@@ -24,9 +33,11 @@ class TextInput extends Component {
         });
     }
 
-    render() {
 
-        const {handleSubmit, classes, submitting, pristine} = this.props;
+    render() {
+        const {handleSubmit, classes, submitting, pristine, change} = this.props;
+
+        console.log(this.props);
 
         return (
             <div className={classNames(classes.inputBar, classes.inputBarFixed)}>
@@ -42,19 +53,20 @@ class TextInput extends Component {
                             className={classes.input}
                         />
                         <div className={classes.buttonContainer}>
-                            <Button
+                            <Dictaphone
+                                resetTextFunc={(funcRef) => this.setState({resetMicFunc: funcRef})}
+                                onChangeValue={(value) => change('inputTextMessage', value)}
+                            />
+                            <LoadingFabButton
+                                mainIcon={<SendIcon/>}
+                                onPress={handleSubmit(this._onSubmit)}
                                 type="submit"
-                                variant="contained"
-                                color="secondary"
-                                className={classes.button}
                                 disabled={pristine || submitting}
-                            >
-                                {submitting ? <CircularProgress color="primary" size={30} thickness={3}/> : 'Send'}
-                            </Button>
+                                color="secondary"
+                            />
                         </div>
                     </div>
                 </form>
-
             </div>
         )
     }
