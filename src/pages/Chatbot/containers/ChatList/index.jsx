@@ -3,14 +3,9 @@ import {withStyles} from '@material-ui/core/styles'
 import {styles} from "./styles";
 import {compose} from 'redux'
 import {connect} from 'react-redux'
-import {
-    Chat as ChatIcon,
-    Face as FaceIcon
-} from '@material-ui/icons';
-import classNames from 'classnames';
-import Typist from 'react-typist';
 import _ from 'lodash'
 import {USER_TYPES} from "../../../../constants";
+import {ChatListItem} from "../../components";
 
 class ChatList extends Component {
 
@@ -19,51 +14,28 @@ class ChatList extends Component {
         this._renderMessagesList = this._renderMessagesList.bind(this)
     }
 
-    _renderLeftRow(item) {
-        const {classes} = this.props;
-
-        return (
-            <div key={`${item.id}_leftRow`} className={classes.messageContainer}>
-                <ChatIcon
-                    classes={{
-                        root: classes.messageIcon
-                    }}
-                />
-                <div className={classes.messageText}>
-                    <Typist
-                        avgTypingDelay={30}
-                        onCharacterTyped={() => this.scrollToBottom()}
-                        stdTypingDelay={15}
-                        cursor={{
-                            hideWhenDone: true,
-                        }}
-                    >{item.text}</Typist>
-                </div>
-            </div>
-        )
-    }
-
-    _renderRightRow(item) {
-        const {classes} = this.props;
-
-        return (
-            <div key={`${item.id}_rightRow`} className={classes.messageContainer}>
-                <FaceIcon
-                    classes={{
-                        root: classes.rightMessageIcon
-                    }}
-                />
-                <div className={classes.rightMessageText}>{item.text}</div>
-            </div>
-        )
-    }
-
     _renderMessagesList() {
         return _.map(this.props.messagesList, message => {
+            let itemOptions = null;
             if (message.messageFrom === USER_TYPES.BOT) {
-                return this._renderLeftRow(message)
+                itemOptions = {
+                    direction: 'left',
+                    speech: true,
+                    typeAnimation: true
+                }
+            } else {
+                itemOptions = {
+                    direction: 'right',
+                };
             }
-            return this._renderRightRow(message)
+            return (
+                <ChatListItem
+                    key={`list_${message.id}`}
+                    message={message}
+                    onCharacterTyped={() => this.scrollToBottom()}
+                    {...itemOptions}
+                />
+            )
         })
     }
 

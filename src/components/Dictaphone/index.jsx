@@ -18,11 +18,15 @@ class Dictaphone extends Component {
         const {
             recognition,
             resetTextFunc,
-            resetTranscript
+            resetTranscript,
+            stopListeningFunc,
+            stopListening
         } = this.props;
 
-        recognition.lang = 'en-US';
-        resetTextFunc(resetTranscript)
+        if(recognition) recognition.lang = 'en-US';
+
+        resetTextFunc(resetTranscript);
+        stopListeningFunc(stopListening)
     }
 
     componentWillUnmount() {

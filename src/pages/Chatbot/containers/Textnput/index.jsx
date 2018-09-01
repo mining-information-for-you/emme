@@ -15,6 +15,7 @@ class TextInput extends Component {
         listening: false,
         typing: false,
         resetMicFunc: null,
+        stopListeningMicFunc: null,
     };
 
     constructor(props) {
@@ -26,6 +27,7 @@ class TextInput extends Component {
         const inputValue = values.inputTextMessage;
         this.props.reset();
         this.state.resetMicFunc();
+        this.state.stopListeningMicFunc();
         return new Promise((resolve, reject) => {
             this.props.sendMessageToBot(inputValue)
                 .then(() => resolve())
@@ -55,6 +57,7 @@ class TextInput extends Component {
                         <div className={classes.buttonContainer}>
                             <Dictaphone
                                 resetTextFunc={(funcRef) => this.setState({resetMicFunc: funcRef})}
+                                stopListeningFunc={(funcRef) => this.setState({stopListeningMicFunc: funcRef})}
                                 onChangeValue={(value) => change('inputTextMessage', value)}
                             />
                             <LoadingFabButton
