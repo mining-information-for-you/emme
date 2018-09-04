@@ -1,6 +1,10 @@
 export const styles = theme => ({
-    messageContainer: {
+    messageRightContainer: {
         margin: '30px 0',
+    },
+    messageLeftContainer: {
+        margin: '30px 0',
+        cursor: 'pointer'
     },
     messageText: {
         fontSize: '1.5rem',

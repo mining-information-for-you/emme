@@ -11,13 +11,19 @@ import {VoicePlayer} from '../../../../components'
 
 class ChatListItem extends Component {
 
+    state = {
+        playTextVoiceFunc: null,
+    };
+
     constructor(props) {
         super(props);
         this._renderRightRow = this._renderRightRow.bind(this);
-        this._renderLeftRow = this._renderLeftRow.bind(this)
+        this._renderLeftRow = this._renderLeftRow.bind(this);
+        this._playAudio = this._playAudio.bind(this)
     }
 
-    componentDidMount(){
+    _playAudio(){
+        this.state.playTextVoiceFunc();
     }
 
     _renderLeftRow(item) {
@@ -26,8 +32,15 @@ class ChatListItem extends Component {
         } = this.props;
 
         return (
-            <div key={`${item.id}_leftRow`} className={classes.messageContainer}>
-                <VoicePlayer play text={item.text}/>
+            <div
+                onClick={this._playAudio}
+                key={`${item.id}_leftRow`}
+                className={classes.messageLeftContainer}
+            >
+                <VoicePlayer
+                    playVoiceTextFunc={(funcRef) => this.setState({playTextVoiceFunc: funcRef})}
+                    play
+                    text={item.text}/>
                 <ChatIcon
                     classes={{
                         root: classes.messageIcon
@@ -35,7 +48,7 @@ class ChatListItem extends Component {
                 />
                 <div className={classes.messageText}>
                     <Typist
-                        avgTypingDelay={30}
+                        avgTypingDelay={50}
                         onCharacterTyped={() => this.props.onCharacterTyped()}
                         stdTypingDelay={15}
                         cursor={{
@@ -51,7 +64,7 @@ class ChatListItem extends Component {
         const {classes} = this.props;
 
         return (
-            <div key={`${item.id}_rightRow`} className={classes.messageContainer}>
+            <div key={`${item.id}_rightRow`} className={classes.messageRightContainer}>
                 <FaceIcon
                     classes={{
                         root: classes.rightMessageIcon

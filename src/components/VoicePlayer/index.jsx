@@ -1,7 +1,12 @@
-import React, { Component } from 'react'
+import React, {Component} from 'react'
 
 class VoicePlayer extends Component {
-    constructor (props) {
+    state = {
+        started: false,
+        playing: false
+    };
+
+    constructor(props) {
         super(props);
 
         if ('speechSynthesis' in window) {
@@ -10,10 +15,8 @@ class VoicePlayer extends Component {
             console.warn('The current browser does not support the speechSynthesis API.')
         }
 
-        this.state = {
-            started: false,
-            playing: false
-        }
+        this.toggleAudio = this.toggleAudio.bind(this)
+
     }
 
     createSpeech = () => {
@@ -34,25 +37,25 @@ class VoicePlayer extends Component {
 
     speak = () => {
         window.speechSynthesis.speak(this.speech);
-        this.setState({ started: true, playing: true })
+        this.setState({started: true, playing: true})
     };
 
     cancel = () => {
         window.speechSynthesis.cancel();
-        this.setState({ started: false, playing: false })
+        this.setState({started: false, playing: false})
     };
 
     pause = () => {
         window.speechSynthesis.pause();
-        this.setState({ playing: false })
+        this.setState({playing: false})
     };
 
     resume = () => {
         window.speechSynthesis.resume();
-        this.setState({ playing: true })
+        this.setState({playing: true})
     };
 
-    componentWillReceiveProps ({ pause }) {
+    componentWillReceiveProps({pause}) {
         if (pause && this.state.playing && this.state.started) {
             return this.pause()
         }
@@ -62,16 +65,26 @@ class VoicePlayer extends Component {
         }
     }
 
-    shouldComponentUpdate () {
+    shouldComponentUpdate() {
         return false
     }
 
-    componentDidMount () {
+    toggleAudio() {
+        if (this.state.playing) {
+            return this.pause()
+        }
+        if (this.state.started) {
+            return this.resume()
+        }
+        return this.speak()
+    }
+
+    componentDidMount() {
         const events = [
-            { name: 'start', action: this.props.onStart },
-            { name: 'error', action: this.props.onError },
-            { name: 'pause', action: this.props.onPause },
-            { name: 'resume', action: this.props.onResume }
+            {name: 'start', action: this.props.onStart},
+            {name: 'error', action: this.props.onError},
+            {name: 'pause', action: this.props.onPause},
+            {name: 'resume', action: this.props.onResume}
         ];
 
         events.forEach(e => {
@@ -79,20 +92,22 @@ class VoicePlayer extends Component {
         });
 
         this.speech.addEventListener('end', () => {
-            this.setState({ started: false });
+            this.setState({started: false, playing: false});
             this.props.onEnd ? this.props.onEnd() : null
         });
+
+        this.props.playVoiceTextFunc(this.toggleAudio);
 
         if (this.props.play) {
             this.speak()
         }
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this.cancel()
     }
 
-    render () {
+    render() {
         return null
     }
 }
