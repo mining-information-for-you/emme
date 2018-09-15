@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import {Component} from 'react'
 
 class VoicePlayer extends Component {
     state = {
@@ -55,7 +55,9 @@ class VoicePlayer extends Component {
         this.setState({playing: true})
     };
 
-    componentWillReceiveProps({pause}) {
+    componentDidUpdate() {
+        const {pause} = this.prop;
+
         if (pause && this.state.playing && this.state.started) {
             return this.pause()
         }
@@ -93,7 +95,9 @@ class VoicePlayer extends Component {
 
         this.speech.addEventListener('end', () => {
             this.setState({started: false, playing: false});
-            this.props.onEnd ? this.props.onEnd() : null
+            if(this.props.onEnd)
+               return  this.props.onEnd();
+            return null
         });
 
         this.props.playVoiceTextFunc(this.toggleAudio);
